@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-class Monster;
+class Creature; 
 
 class Npc {
 protected:
@@ -11,16 +11,19 @@ protected:
     int abilityDamage;
 
 public:
-    Npc() : name("Unknown"), health(0), damage(0), abilityDamage(0) {}
+    Npc(const std::string& name, int health, int damage, int abilityDamage)
+        : name(name), health(health), damage(damage), abilityDamage(abilityDamage) {}
+    
     virtual ~Npc() = default;
-
-    virtual void Create() = 0;
-    virtual void ShowInfo() = 0;
-    virtual void Attack(Monster& enemy) = 0;
-    virtual void UseAbility(Monster& enemy) = 0;
-    virtual bool IsAlive() = 0;
-    virtual void TakeDamage(int dmg) = 0;
-
+    
+    virtual void ShowInfo() const = 0;
+    virtual void Attack(Creature& enemy) = 0;
+    virtual void UseAbility(Creature& enemy) = 0;
+    
+    bool IsAlive() const { return health > 0; }
+    void TakeDamage(int dmg) { health -= dmg; if(health < 0) health = 0; }
+    
+    // Геттеры
     std::string GetName() const { return name; }
     int GetHealth() const { return health; }
     int GetDamage() const { return damage; }
